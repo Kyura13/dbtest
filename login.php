@@ -4,6 +4,16 @@
     if (isset($_POST['login'])) {
         $username = $_POST['username'];
         $password = $_POST['password'];
+
+        $sql = "SELECT * FROM users WHERE username='$username' AND PASSWORD='$password'";
+
+        $result = $db->query($sql);
+
+        if($result-> num_rows > 0){
+            echo "data ditemukan";
+        }else{
+            echo "data tidak ada";
+        }
     }
 ?>
 
