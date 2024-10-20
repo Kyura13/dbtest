@@ -1,5 +1,12 @@
 <?php 
     include "service/database.php";
+    session_start();
+
+    $login_message ="";
+
+    if (isset($_SESSION["is_login"])){
+        header("location: dashboard.php");
+    }
 
     if (isset($_POST['login'])) {
         $username = $_POST['username'];
@@ -13,13 +20,17 @@
         if($result-> num_rows > 0){
             $data = $result->fetch_assoc();
 
+            // SESSION yang akan ditampung server (username/bebas diganti) - Apa yang akan ditampung oleh SESSION (username)
+            $_SESSION["username"] = $data["username"];
+            $_SESSION["is_login"] = true;
+
             // echo "data username adalah: " . $data["username"];
             // echo "data password adalah: " . $data["password"];
 
             // Go to 
             header("location: dashboard.php");
         }else{
-            echo "data tidak ditemukan";
+            $login_message = "data tidak ditemukan";
         }
     }
 ?>
@@ -35,6 +46,7 @@
     <?php include "layout/header.html" ?>
 
     <h3>Masuk Akun</h3>
+    <i><?= $login_message ?></i>
     <form action="login.php" method="POST">
         <input type="text" placeholder="username" name="username" />
         <input type="password" placeholder="password" name="password" />

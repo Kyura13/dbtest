@@ -1,18 +1,31 @@
 <?php
     include "service/database.php";
+    session_start();
+    
+    $register_message ="";
+
+    if (isset($_SESSION["is_login"])){
+        header("location: dashboard.php");
+    }
 
     if (isset($_POST["register"])) {
         $username = $_POST['username'];
         $password = $_POST['password'];
 
-        $sql = "INSERT INTO users (username, password) VALUES ('$username', '$password')";
+        try {$sql = "INSERT INTO users (username, password) VALUES ('$username', '$password')";
 
-        if($db->query($sql)) {
-            echo 'OK MANTAP DATA MASUK';
+            if($db->query($sql)) {
+                $register_message = "daftar akun berhasil, silahkan login";
+            }
+            else {
+                $register_message = "daftar akun gagal, silahkan coba lagi";
+            }
+            //Bagian exception pada catch bisa ditambah dengan $e
+        } catch(mysqli_sql_exception) {
+            $register_message = "username sudah digunakan";
         }
-        else {
-            'DATA GAGAL MASUK';
-        }
+        $db->close();
+
     }
 ?>
 
@@ -28,6 +41,7 @@
     <?php include "layout/header.html"?>
 
     <h3>Daftar Akun</h3>
+    <i><?= $register_message ?></i>
     <form action ="register.php" method="POST">
         <input type="text" placeholder="username" name="username" />
         <input type="password" placeholder="password" name="password" />
