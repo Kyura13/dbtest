@@ -9,10 +9,17 @@
 
         $result = $db->query($sql);
 
+        // Validasi Data (Komparasi data dengan yang ada di database)
         if($result-> num_rows > 0){
-            echo "data ditemukan";
+            $data = $result->fetch_assoc();
+
+            // echo "data username adalah: " . $data["username"];
+            // echo "data password adalah: " . $data["password"];
+
+            // Go to 
+            header("location: dashboard.php");
         }else{
-            echo "data tidak ada";
+            echo "data tidak ditemukan";
         }
     }
 ?>
